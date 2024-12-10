@@ -218,8 +218,49 @@ class YAMLConfigManager:
             )
             return False
 
-    def add_items_to_group(self, group_name, items):
 
+
+    def remove_item_from_group(self, group_name, item):
+        """
+        Removes a specific item from a group in the 'Groups' section.
+
+        Args:
+            group_name (str): The name of the group to remove the item from.
+            item (str): The item to remove from the group.
+        """
+        if self.yaml_data and "Groups" in self.yaml_data:
+            groups = self.yaml_data["Groups"]
+
+            if group_name in groups:
+                group_items = groups[group_name]
+                
+                if isinstance(group_items, list):
+                    if item in group_items:
+                        group_items.remove(item)
+                        print(f"Item '{item}' removed from group '{group_name}'.")
+
+                        # If the list is empty, convert it to an empty dictionary
+                        if not group_items:
+                            groups[group_name] = {}
+                            print(f"Group '{group_name}' is now an empty dictionary.")
+                        
+                        self._write_yaml_file()
+                        return True
+                    else:
+                        print(f"Item '{item}' not found in group '{group_name}'.")
+                        return False
+                else:
+                    print(f"Group '{group_name}' is not a list. Cannot remove item.")
+                    return False
+            else:
+                print(f"Group '{group_name}' does not exist.")
+                return False
+        else:
+            print("No 'Groups' section found in YAML data.")
+            return False
+
+
+    def add_items_to_group(self, group_name, items):
         if self.yaml_data and "Groups" in self.yaml_data:
             groups = self.yaml_data["Groups"]
 
@@ -227,15 +268,15 @@ class YAMLConfigManager:
                 existing_items = groups[group_name]
 
                 if isinstance(existing_items, list):
-
+                    # If the group is already a list, add items directly, even if they are the same
                     for item in items:
-                        if item not in existing_items:
-                            existing_items.append(item)
+                        existing_items.append(item)  # Just append without checking for duplicates
                 elif isinstance(existing_items, dict):
+                    # If the group is a dictionary, convert it to a list and add items
+                    print(f"Group '{group_name}' is a dictionary. Converting it to a list and adding items.")
+                    groups[group_name] = []  # Convert dictionary to an empty list
 
-                    print(f"Group '{group_name}' is empty. Initializing it as a list.")
-                    groups[group_name] = []
-
+                    # Append the items, even if they are the same as others
                     for item in items:
                         groups[group_name].append(item)
 
@@ -245,6 +286,7 @@ class YAMLConfigManager:
                     )
                     return False
 
+                # After adding items, write to the YAML file
                 self._write_yaml_file()
                 print(f"Items {items} added to group '{group_name}'.")
                 return True
@@ -254,6 +296,9 @@ class YAMLConfigManager:
         else:
             print("No 'Groups' structure found in the YAML data.")
             return False
+
+
+
 
     def set_nested_value(
         self, entity_group_name, group_name, section, property_name, new_value
@@ -310,7 +355,7 @@ def retrieve_group_items(config_manager, group_name):
         return group_items
     else:
         print(f"Group '{group_name}' not found.")
-        return []
+        return {}
 
 
 def get_parent_key(self, section_path):

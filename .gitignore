@@ -1,2 +1,4 @@
 temp_work.py
 /__pycache__
+*.yaml
+*.yaml

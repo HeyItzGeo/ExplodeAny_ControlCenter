@@ -366,15 +366,12 @@ class MainInputOutput:
             QMessageBox.warning(None, "Error", "No config loaded. Cannot add block.")
             return
 
-        # Open the custom dialog for adding a block
-        dialog = AddEntityDialog([], item_type="Block")  # Pass "Block" as the item type
+       
+        dialog = AddEntityDialog({}, item_type="Block") 
         if dialog.exec() == QDialog.DialogCode.Accepted:
             block_input = dialog.get_data()
             if block_input:
-                # Split input by commas if there are multiple values
                 block_names = [name.strip() for name in block_input.split(',')]
-
-                # Remove the "Empty" placeholder if present
                 for i in range(block_list_widget.count()):
                     if block_list_widget.item(i).text() == "Empty":
                         block_list_widget.takeItem(i)
@@ -396,10 +393,21 @@ class MainInputOutput:
 
     def remove_selected(self, entity_list_widget, block_list_widget):
         """Remove the selected entities or blocks."""
+
         for widget in (entity_list_widget, block_list_widget):
             selected_items = widget.selectedItems()
+
+            if widget == entity_list_widget:
+                group = self.selected_entity_group
+            elif widget == block_list_widget:
+                group = self.selected_block_group
+
             for item in selected_items:
-                widget.takeItem(widget.row(item))
+                widget.takeItem(widget.row(item))  
+                print(f"Removing {item.text()} from group {group}")
+                self.config_manager.remove_item_from_group(group, item.text()) 
+
+
 
     def on_Empty_Load(self):
         """Prompt the user for a file save location and create an empty configuration file."""

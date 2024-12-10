@@ -16,29 +16,17 @@ Checktool:
 DisabledWorlds: []
 EnableMetrics: true
 Groups:
-  test1:
-  - test2
-  - Entity1
-  - Entity2
+  Group1:
   - test
-  - a,b,c,d,e
-  - a
-  - b
-  - d
-  - e
+  - WITHER
   - PRIMED_TNT
-  test2:
+  - PRIMED_TNT
   - test
-  - block
-  - a
-  - b
-  - c
-  - d
-  - ''
-  - e
-  - f
-  - g
-  - h
+  Group2:
+  - test
+  - test
+  test1: {}
+  test2: {}
 Locale:
   ChecktoolAlwaysEnabled: Checktool can't be toggled off
   ChecktoolGiven: A checktool (%PRETTY_ITEM%) was given to player %NAME%
@@ -67,6 +55,60 @@ Locale:
 LocalePrefix: '[ExplodeAny]'
 UseBlockDatabase: false
 VanillaEntity:
+  Group1:
+    Materials:
+      Group2:
+        Damage: 57.4
+        DistanceAttenuationFactor: 0.0
+        DropChance: 0.0
+        FancyUnderwaterDetection: true
+        Particles:
+          Amount: 2000
+          DeltaX: 5.0
+          DeltaY: 5.0
+          DeltaZ: 5.0
+          Force: true
+          Material: OBSIDIAN
+          Name: BLOCK_CRACK
+          Speed: 1.0
+        Sound:
+          Name: ENTITY_OCELOT_HURT
+          Pitch: 1.0
+          Volume: 1.0
+        UnderwaterDamageFactor: 0.5
+    Properties:
+      ExplosionDamageBlocksUnderwater: false
+      ExplosionFactor: 1.0
+      ExplosionRadius: 0.0
+      ExplosionRemoveNearbyLiquids: false
+      ExplosionRemoveNearbyLiquidsOnSurface: true
+      ExplosionRemoveNearbyLiquidsUnderwater: true
+      ExplosionRemoveNearbyWaterloggedBlocks: false
+      ExplosionRemoveNearbyWaterloggedBlocksOnSurface: true
+      ExplosionRemoveNearbyWaterloggedBlocksUnderwater: true
+      ExplosionRemoveWaterloggedStateFromNearbyBlocks: false
+      ExplosionRemoveWaterloggedStateFromNearbyBlocksOnSurface: true
+      ExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater: true
+      PackDroppedItems: false
+      Particles:
+        Amount: 2000
+        Blue: 255
+        DeltaX: 2.0
+        DeltaY: 2.0
+        DeltaZ: 2.0
+        Force: true
+        Green: 0
+        Name: REDSTONE
+        Red: 255
+        Size: 2.0
+        Speed: 1.0
+      ReplaceOriginalExplosion: false
+      ReplaceOriginalExplosionWhenUnderwater: true
+      Sound:
+        Name: ENTITY_OCELOT_HURT
+        Pitch: 1.0
+        Volume: 1.0
+      UnderwaterExplosionFactor: 0.5
   test1:
     Materials:
       test2:
