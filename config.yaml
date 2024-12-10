@@ -1,0 +1,123 @@
+BlockDurability: 100.0
+CheckBlockDatabaseAtStartup: false
+Checktool:
+  AlwaysEnabled: false
+  BossBarColor: PURPLE
+  BossBarDuration: 30
+  BossBarStyle: SOLID
+  EnabledByDefault: false
+  PreventActionWhenCheckingHandledBlocks: true
+  PreventActionWhenCheckingNonHandledBlocks: true
+  ShowBossBar: false
+  SilentWhenCheckingHandledBlocks: false
+  SilentWhenCheckingNonHandledBlocks: false
+  SilentWhenCheckingOnDisabledWorlds: false
+  SilentWhenCheckingWithoutPermissions: false
+DisabledWorlds: []
+EnableMetrics: true
+Groups:
+  test1:
+  - test2
+  - Entity1
+  - Entity2
+  - test
+  - a,b,c,d,e
+  - a
+  - b
+  - d
+  - e
+  - PRIMED_TNT
+  test2:
+  - test
+  - block
+  - a
+  - b
+  - c
+  - d
+  - ''
+  - e
+  - f
+  - g
+  - h
+Locale:
+  ChecktoolAlwaysEnabled: Checktool can't be toggled off
+  ChecktoolGiven: A checktool (%PRETTY_ITEM%) was given to player %NAME%
+  ChecktoolInfo: 'Current checktool item: %PRETTY_ITEM%'
+  ChecktoolNotHandled: '%PRETTY_MATERIAL% is not handled by the current configuration'
+  ChecktoolNotPersisted: Checktool item was set to %PRETTY_ITEM%, but it couldn't
+    be persisted
+  ChecktoolReset: Checktool successfully reset to bare hand (Air)
+  ChecktoolSet: Checktool successfully set to %PRETTY_ITEM%!
+  ChecktoolToggledOff: Checktool mode toggled off for player %NAME%
+  ChecktoolToggledOn: Checktool mode toggled on for player %NAME%
+  ChecktoolUse: 'Block health: %DURABILITY_PERCENTAGE%% (%PRETTY_MATERIAL%)'
+  ChecktoolUseBossBar: '%PRETTY_MATERIAL%: %DURABILITY_PERCENTAGE%%'
+  DebugDisabled: Debug mode has been disabled
+  DebugEnabled: Debug mode has been enabled
+  DisabledInThisWorld: This functionality is disabled in this world
+  EnterChecktoolMode: You can now right-click a block with %PRETTY_ITEM% to display
+    block durability
+  LeaveChecktoolMode: You can no longer check for a block durability
+  NotAllowed: You are not allowed to perform this action!
+  OnlyPlayerAllowed: Only players can perform this action!
+  PlayerDoesntExist: Player %NAME% doesn't exist in the server!
+  PlayerIsOffline: Player %NAME% must be online to perform that
+  Reloaded: Reloaded successfully!
+  Usage: 'Usage: %DESCRIPTION%'
+LocalePrefix: '[ExplodeAny]'
+UseBlockDatabase: false
+VanillaEntity:
+  test1:
+    Materials:
+      test2:
+        Damage: 50.0
+        DistanceAttenuationFactor: 0.0
+        DropChance: 0.0
+        FancyUnderwaterDetection: false
+        Particles:
+          Amount: 2000
+          DeltaX: 5.0
+          DeltaY: 5.0
+          DeltaZ: 5.0
+          Force: true
+          Material: OBSIDIAN
+          Name: BLOCK_CRACK
+          Speed: 1.0
+        Sound:
+          Name: ENTITY_OCELOT_HURT
+          Pitch: 1.0
+          Volume: 1.0
+        UnderwaterDamageFactor: 0.5
+    Properties:
+      ExplosionDamageBlocksUnderwater: false
+      ExplosionFactor: 1.0
+      ExplosionRadius: 0.0
+      ExplosionRemoveNearbyLiquids: false
+      ExplosionRemoveNearbyLiquidsOnSurface: true
+      ExplosionRemoveNearbyLiquidsUnderwater: true
+      ExplosionRemoveNearbyWaterloggedBlocks: false
+      ExplosionRemoveNearbyWaterloggedBlocksOnSurface: true
+      ExplosionRemoveNearbyWaterloggedBlocksUnderwater: true
+      ExplosionRemoveWaterloggedStateFromNearbyBlocks: false
+      ExplosionRemoveWaterloggedStateFromNearbyBlocksOnSurface: true
+      ExplosionRemoveWaterloggedStateFromNearbyBlocksUnderwater: true
+      PackDroppedItems: false
+      Particles:
+        Amount: 2000
+        Blue: 255
+        DeltaX: 2.0
+        DeltaY: 2.0
+        DeltaZ: 2.0
+        Force: true
+        Green: 0
+        Name: REDSTONE
+        Red: 255
+        Size: 2.0
+        Speed: 1.0
+      ReplaceOriginalExplosion: false
+      ReplaceOriginalExplosionWhenUnderwater: true
+      Sound:
+        Name: ENTITY_OCELOT_HURT
+        Pitch: 1.0
+        Volume: 1.0
+      UnderwaterExplosionFactor: 0.5

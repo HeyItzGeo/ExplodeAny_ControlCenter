@@ -1,11 +1,65 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMessageBox, QWidget,QMenuBar, QVBoxLayout, QScrollArea, QListWidget, QListWidgetItem, QInputDialog, QPushButton,QFileDialog,QFormLayout
+from PyQt6.QtWidgets import QApplication, QMessageBox,QComboBox, QDialogButtonBox,QDialog,QLineEdit,QLabel, QWidget,QMenuBar, QVBoxLayout, QScrollArea, QListWidget, QListWidgetItem, QInputDialog, QPushButton,QFileDialog,QFormLayout
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QAction,QIcon,QColor,QFont
 import MainUIv6 as UI
 import Backend as backend
 import yaml
 import Right_PropEditor as RightSection
+
+
+
+class AddEntityDialog(QDialog):
+    def __init__(self, allowed_entity_values, item_type="Entity", parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(f"Add {item_type}")
+        self.selected_entity = None
+        self.entered_text = None
+        self.item_type = item_type  
+
+        
+        layout = QVBoxLayout(self)
+
+        
+        self.line_edit = QLineEdit(self)
+        self.line_edit.setPlaceholderText(f"Custom {self.item_type} Name")
+        layout.addWidget(QLabel(f"Enter {self.item_type} Name:"))
+        layout.addWidget(self.line_edit)
+
+        if allowed_entity_values:  
+            
+            self.combo_box = QComboBox(self)
+            self.combo_box.addItem(f"Custom {self.item_type}")  
+            self.combo_box.addItems(allowed_entity_values)  
+            self.combo_box.currentIndexChanged.connect(self.on_combo_box_changed)
+            layout.addWidget(QLabel(f"Or pick from the {self.item_type} List below:"))
+            layout.addWidget(self.combo_box)
+
+        
+        self.button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel, self)
+        self.button_box.accepted.connect(self.accept)
+        self.button_box.rejected.connect(self.reject)
+        layout.addWidget(self.button_box)
+
+    def on_combo_box_changed(self, index):
+        """Enable or disable the line edit based on the selected combo box option."""
+        if self.combo_box.itemText(index) == f"Custom {self.item_type}":
+            self.line_edit.setEnabled(True)
+        else:
+            self.line_edit.setEnabled(False)
+
+    def get_data(self):
+        """
+        Returns the entered text or the selected item.
+        If 'Custom {item_type}' is selected, use the text from the line edit.
+        """
+        if hasattr(self, 'combo_box') and self.combo_box.currentText() == f"Custom {self.item_type}":
+            self.entered_text = self.line_edit.text().strip()
+            if self.entered_text:
+                # Split input by commas if multiple values
+                return [name.strip() for name in self.entered_text.split(',')]
+            return None
+        return self.combo_box.currentText() if hasattr(self, 'combo_box') else self.line_edit.text().strip()
 
 
 class MainInputOutput:
@@ -255,64 +309,88 @@ class MainInputOutput:
             config_editor_instance.group_box.setTitle(Title)
 
 
-    def add_entity(self, entity_list_widget):
-           # Check if config_manager is initialized
+    def add_entity(self, entity_list_widget: QListWidget):
+        # Check if config_manager is initialized
         if not self.config_manager or not self.config_manager.get_value('Groups'):
             QMessageBox.warning(None, "Error", "No config loaded. Cannot add entity.")
             return
-        """Prompt the user to add an entity."""
-        text, ok = QInputDialog.getText(None, "Add Entity", "Enter Entity Name:")
-        if ok and text:
-            # Remove the "Empty" placeholder if present
-            for i in range(entity_list_widget.count()):
-                if entity_list_widget.item(i).text() == "Empty":
-                    entity_list_widget.takeItem(i)
-                    break
+        allowed_entity_values = [
+                     "PRIMED_TNT", "ENDER_CRYSTAL","WITHER", "MINECART_TNT", "CREEPER", 
+                    "CHARGED_CREEPER", "FIREBALL", "DRAGON_FIREBALL", "SMALL_FIREBALL",
+                    "WITHER_SKULL", "CHARGED_WITHER_SKULL", "BED", "RESPAWN_ANCHOR"
+                ]
 
-            # Add the new entity to the list widget
-            entity_list_widget.addItem(text)
+        # Open the custom dialog for adding an entity
+        dialog = AddEntityDialog(allowed_entity_values, item_type="Entity")
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            entity_input = dialog.get_data()
+            if entity_input:
+                if isinstance(entity_input, list):
+                    # Remove the "Empty" placeholder if present
+                    for i in range(entity_list_widget.count()):
+                        if entity_list_widget.item(i).text() == "Empty":
+                            entity_list_widget.takeItem(i)
+                            break
 
-            # Ensure the selected entity group is set
-            if self.selected_entity_group:
-                # Prepare the item to be added to the group
-                items = [text]
-                # Add the item to the selected entity group in the config manager (backend)
-                self.config_manager.add_items_to_group(self.selected_entity_group, items)
-                print(f"Added '{text}' to the '{self.selected_entity_group}' entity group.")
-            else:
-                print("No entity group selected. Cannot add entity.")
+                    # Add each new entity to the list widget
+                    for entity_name in entity_input:
+                        entity_list_widget.addItem(entity_name)
+                    if self.selected_entity_group:
+                        
+                        self.config_manager.add_items_to_group(self.selected_entity_group, entity_input)
+                        print(f"Added entities {', '.join(entity_input)} to the '{self.selected_entity_group}' entity group.")
+                    else:
+                        print("No entity group selected. Cannot add entity.")
+                else:
+                    
+                    entity_name = entity_input
+                    # Remove the "Empty" placeholder if present
+                    for i in range(entity_list_widget.count()):
+                        if entity_list_widget.item(i).text() == "Empty":
+                            entity_list_widget.takeItem(i)
+                            break
+                    entity_list_widget.addItem(entity_name)
 
-
+                    
+                    if self.selected_entity_group:
+                        self.config_manager.add_items_to_group(self.selected_entity_group, [entity_name])
+                        print(f"Added '{entity_name}' to the '{self.selected_entity_group}' entity group.")
+                    else:
+                        print("No entity group selected. Cannot add entity.")
 
     def add_block(self, block_list_widget):
-        """Prompt the user to add a block."""
+        """Prompt the user to add a block using AddEntityDialog."""
         
-       # Check if config_manager is initialized
+        # Check if config_manager is initialized
         if not self.config_manager or not self.config_manager.get_value('Groups'):
             QMessageBox.warning(None, "Error", "No config loaded. Cannot add block.")
             return
-        text, ok = QInputDialog.getText(None, "Add Block", "Enter Block Name:")
-        if ok and text:
-            # Remove the "Empty" placeholder if present
-            for i in range(block_list_widget.count()):
-                if block_list_widget.item(i).text() == "Empty":
-                    block_list_widget.takeItem(i)
-                    break
 
-            # Add the new block to the list widget
-            block_list_widget.addItem(text)
+        # Open the custom dialog for adding a block
+        dialog = AddEntityDialog([], item_type="Block")  # Pass "Block" as the item type
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            block_input = dialog.get_data()
+            if block_input:
+                # Split input by commas if there are multiple values
+                block_names = [name.strip() for name in block_input.split(',')]
 
-            # Ensure the selected block group is set
-            if self.selected_block_group:
-                # Prepare the item to be added to the group
-                items = [text]
-                # Add the item to the selected block group in the config manager (backend)
-                self.config_manager.add_items_to_group(self.selected_block_group, items)
-                print(f"Added '{text}' to the '{self.selected_block_group}' block group.")
-            else:
-                print("No block group selected. Cannot add block.")
+                # Remove the "Empty" placeholder if present
+                for i in range(block_list_widget.count()):
+                    if block_list_widget.item(i).text() == "Empty":
+                        block_list_widget.takeItem(i)
+                        break
 
+                # Add the new blocks to the list widget
+                for block_name in block_names:
+                    block_list_widget.addItem(block_name)
 
+                # Ensure the selected block group is set
+                if self.selected_block_group:
+                    # Prepare the items to be added to the group
+                    self.config_manager.add_items_to_group(self.selected_block_group, block_names)
+                    print(f"Added blocks {', '.join(block_names)} to the '{self.selected_block_group}' block group.")
+                else:
+                    print("No block group selected. Cannot add block.")
 
 
 
