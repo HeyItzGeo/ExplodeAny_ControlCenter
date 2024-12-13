@@ -17,6 +17,25 @@ Discover the full capabilities of the **ExplodeAny** plugin on GitHub:
 
 - **For Developers or Custom Modifications**: If you want to modify the source code or run the program in a different environment, you can download the source code directly from the GitHub repository.
 
+<details>
+  <summary>Click to view the pyinstaller command</summary>
+
+```
+pyinstaller --noconfirm --onefile --windowed --name "ExplodeAny_ControlCenter" --clean --splash "Logo.webp" --add-data "Backend.py;." --add-data "MainUIv6.py;." --add-data "Right_PropEditor.py;." --add-data "Icons;Icons/" "Run_ConfigEditor.py"
+```
+
+```
+  **Folder structure of the project:**
+
+  ExplodeAny_ControlCenter/
+  ├── Logo.webp
+  ├── Backend.py
+  ├── MainUIv6.py
+  ├── Right_PropEditor.py
+  ├── Icons/ (folder containing icon files)
+  └── Run_ConfigEditor.py
+```
+</details>
 
 ---
 
