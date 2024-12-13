@@ -13,7 +13,7 @@ Discover the full capabilities of the **ExplodeAny** plugin on GitHub:
 ---
 ## 🚀 Download & Run
 
-- **For Windows Users**: You can download the **.exe** version of the **ExplodeAny ControlCenter** from the release section of the GitHub repository. This version is ready to run on your system without any extra setup.
+- **For Windows Users**: You can download the **.exe** version of the **[ExplodeAny ControlCenter](https://github.com/HeyItzGeo/ExplodeAny_ControlCenter/releases/download/V2/ExplodeAny_ControlCenter.exe)** from the release section of the GitHub repository. This version is ready to run on your system without any extra setup.
 
 - **For Developers or Custom Modifications**: If you want to modify the source code or run the program in a different environment, you can download the source code directly from the GitHub repository.
 
@@ -37,9 +37,10 @@ The **ExplodeAny ControlCenter** makes it simple to create and modify configurat
 
 ### 3. **Adding Values to Blocks and Entities**
    - **For Blocks**:  
-     To add block values, select the block group name in the middle box and enter block types like `GLASS`, `GRASS_BLOCK`, etc.
+     To add block values, select the block group name in the middle box and enter block types like `GRASS_BLOCK`, `GLASS`, etc.
    - **For Entities**:  
      To add entity values, select the entity group name in the middle box. You can either enter a custom value or pick from the dropdown list of common entities such as `PRIMED_TNT`, `WITHER`, and more.
+  - **Comma-separated values are also accepted**:
 
 ### 4. **Modifying Property Values**
    - **For Entity Properties**:  
