@@ -28,7 +28,7 @@ The **ExplodeAny ControlCenter** makes it simple to create and modify configurat
    - **To create a new config**:  
      Go to `File > Empty Config`, then choose a location to save your new config and give it a name.
    - **To load an existing config**:  
-     Open the config from your saved location.
+     Go to `File > Load Config`, then choose your config from a saved location.
 
 ### 2. **Adding Entity and Block Groups**
    - After creating or loading a config, you need to define groups for entities and blocks.
