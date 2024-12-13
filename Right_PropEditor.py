@@ -1,4 +1,5 @@
 import sys  
+import os
 from PyQt6.QtCore import Qt  
 from PyQt6.QtGui import QIcon  
 from PyQt6.QtWidgets import (  
@@ -173,6 +174,14 @@ class ScrollableLineEdit(QLineEdit):
         """
         return self._value
 
+def resource_path(relative_path):
+    """Get the absolute path to a resource, works for development and PyInstaller bundle."""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    except Exception:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, relative_path)
 
 class RightSection_Editor(QWidget):
     def __init__(self, backend, section=None):
@@ -183,7 +192,9 @@ class RightSection_Editor(QWidget):
 
     def init_ui(self):
         self.setWindowTitle("Config Editor")
-        self.setWindowIcon(QIcon("icon.png"))
+        
+        icon_path = resource_path("Icons/service-logo.png")
+        self.setWindowIcon(QIcon(icon_path))
 
         self.layout = QHBoxLayout()
 

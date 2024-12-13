@@ -7,7 +7,8 @@ import Backend as backend
 import yaml
 import Right_PropEditor as RightSection
 
-
+import os
+import importlib.util
 
 class AddEntityDialog(QDialog):
     def __init__(self, allowed_entity_values, item_type="Entity", parent=None):
@@ -16,11 +17,12 @@ class AddEntityDialog(QDialog):
         self.selected_entity = None
         self.entered_text = None
         self.item_type = item_type  
-
-        
+        icon_path = resource_path("Icons/service-logo.png")
+        self.setWindowIcon(QIcon(icon_path))
+    
         layout = QVBoxLayout(self)
 
-        
+
         self.line_edit = QLineEdit(self)
         self.line_edit.setPlaceholderText(f"Custom {self.item_type} Name")
         layout.addWidget(QLabel(f"Enter {self.item_type} Name:"))
@@ -68,6 +70,7 @@ class MainInputOutput:
         self.config_manager = None 
         self.selected_entity_group = None 
         self.selected_block_group = None
+        self.main_window = window
         self.setup_connections()
         self.create_file_menu()
     def setup_connections(self):
@@ -312,7 +315,7 @@ class MainInputOutput:
     def add_entity(self, entity_list_widget: QListWidget):
         # Check if config_manager is initialized
         if not self.config_manager or not self.config_manager.get_value('Groups'):
-            QMessageBox.warning(None, "Error", "No config loaded. Cannot add entity.")
+            QMessageBox.warning(self.main_window, "Error", "No config loaded. Cannot add entity.")
             return
         allowed_entity_values = [
                      "PRIMED_TNT", "ENDER_CRYSTAL","WITHER", "MINECART_TNT", "CREEPER", 
@@ -363,7 +366,7 @@ class MainInputOutput:
         
         # Check if config_manager is initialized
         if not self.config_manager or not self.config_manager.get_value('Groups'):
-            QMessageBox.warning(None, "Error", "No config loaded. Cannot add block.")
+            QMessageBox.warning(self.main_window, "Error", "No config loaded. Cannot add block.")
             return
 
        
@@ -713,17 +716,37 @@ class MainInputOutput:
                 print(f"Error loading YAML: {e}")
 
 
+def resource_path(relative_path):
+    """Get the absolute path to the resource, works for both development and frozen exe."""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS when running the bundled .exe
+        base_path = sys._MEIPASS
+    except Exception:
+        # Fallback to the current working directory in development
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, relative_path)
+
 
 def main():
+
+    # Check if the splash screen is needed (for bundled apps)
+    if '_PYI_SPLASH_IPC' in os.environ and importlib.util.find_spec("pyi_splash"):
+        import pyi_splash
+        
+        pyi_splash.close()
+        
     # Initialize the application
     app = QApplication(sys.argv)
     #app.setStyleSheet("QWidget { background-color: lightblue; }")
     # Create the main window
-
+    icon_path = resource_path("Icons/service-logo.png")
     window = UI.MainWindow()
     window.setWindowTitle("YAMLConfigManager - ExplodeAny")
     window.setStyleSheet("QMainWindow { background-color: lightgrey; }")
-    window.setWindowIcon(QIcon('Icons/service-logo.png'))
+    window.setWindowIcon(QIcon(icon_path))
+    
+
 
 
 
@@ -731,6 +754,8 @@ def main():
     io_handler = MainInputOutput(window)
 
     window.show()
+    
+    
 
     # Run the application
     sys.exit(app.exec())

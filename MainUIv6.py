@@ -141,15 +141,29 @@ class GroupSelector(QWidget):
                 else:
 
                     item.setBackground(QColor("#FFFFFF"))
-                    icon = QIcon("Icons/GroupBlockIcon.svg")
+                    icon_path = resource_path("Icons/GroupBlockIcon.svg")
+                    icon = QIcon(icon_path)
+                    
                     item.setIcon(icon)
             else:
 
-                icon = QIcon("Icons/GroupEntityIcon.svg")
+                icon_path = resource_path("Icons/GroupEntityIcon.svg")
+                icon = QIcon(icon_path)
                 item.setIcon(icon)
 
             self.group_list.addItem(item)
 
+
+def resource_path(relative_path):
+    """Get the absolute path to the resource, works for both development and frozen exe."""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS when running the bundled .exe
+        base_path = sys._MEIPASS
+    except Exception:
+        # Fallback to the current working directory in development
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, relative_path)
 
 from PyQt6.QtWidgets import QFrame
 
